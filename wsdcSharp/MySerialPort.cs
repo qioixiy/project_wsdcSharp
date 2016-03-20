@@ -28,9 +28,9 @@ namespace wsdcSharp
             return serialPort;
         }
 
-        private bool handleRecvBuffer()
+        private int handleRecvBuffer()
         {
-            return true;
+            return Protocal.ParserFrame(RecvBuffer);
         }
 
         private void DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -38,10 +38,32 @@ namespace wsdcSharp
             int i = serialPortOrig.ReadByte();
             RecvBuffer.Add((byte)i);
 
-            if (RecvBuffer.Count > 3)
+            if (RecvBuffer.Count >= 6)
             {
-                handleRecvBuffer();
+                int ret = handleRecvBuffer();
+                if (ret > 0)
+                {
+                    // handle
+                    RecvBuffer.RemoveRange(0, ret);
+                }
+                else
+                {
+                    ;
+                }
             }
+        }
+        public bool SendFrame(Protocal.Frame frame)
+        {
+            List<byte> listByte = Protocal.FrameToListByte(frame);
+            byte[] bytes = Protocal.ListByteToBytes(listByte);
+            MySerialPort.Get().serialPortOrig.Write(bytes, 0, bytes.Length);
+            return true;
+        }
+
+        public bool SendFrameTest()
+        {
+            Protocal.Frame frame = new Protocal.Frame();
+            return SendFrame(frame);
         }
     }
 }

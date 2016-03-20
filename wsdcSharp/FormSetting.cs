@@ -63,6 +63,8 @@ namespace wsdcSharp
             try
             {
                 MySerialPort.Get().serialPortOrig.WriteLine(textBox_in.Text);
+
+                MySerialPort.Get().SendFrameTest();
             }
             catch (Exception ex)
             {

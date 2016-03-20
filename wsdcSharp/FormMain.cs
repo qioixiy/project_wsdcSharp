@@ -133,5 +133,21 @@ namespace wsdcSharp
         {
             UpdateOrderList();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Protocal p = new Protocal();
+
+            byte[] bytes = { 0x01, 0x02 };
+            Protocal.Frame frame = p.MakeFrame(
+                Protocal.DeviceAddr_MCU,
+                Protocal.FuncID_ReadData,
+                Protocal.DataDestAddr_CanPan,
+                bytes);
+
+            List<byte> listByte = Protocal.FrameToListByte(frame);
+
+            int ret = Protocal.ParserFrame(listByte);
+        }
     }
 }
