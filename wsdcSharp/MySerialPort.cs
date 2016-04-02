@@ -35,33 +35,7 @@ namespace wsdcSharp
         {
             return Protocal.ParserFrame(RecvBuffer);
         }
-        private void ConsoleWriteHex(List<Byte> bs)
-        {
-            foreach (Byte b in bs)
-            {
-                Console.Write("0x{0:x2} ", b);
-            }
-        }
-        private void ConsoleWriteHex(Byte[] bs, int size)
-        {
-            int index = 0;
-            foreach (Byte b in bs)
-            {
-                index++;
-                if (index > size)
-                {
-                    break;
-                }
-                Console.Write("0x{0:x2} ", b);
-            }
-        }
-        private void ConsoleWriteHex(Byte[] bs)
-        {
-            foreach (Byte b in bs)
-            {
-                Console.Write("0x{0:x2} ", b);
-            }
-        }
+
         private void DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             // 识别餐盘ID后，下位机设备主动向上位机写
@@ -86,7 +60,7 @@ namespace wsdcSharp
 
             RecvBuffer.AddRange(buf1);
             //ConsoleWriteHex(buf, size);
-            ConsoleWriteHex(RecvBuffer);
+            utils.ConsoleWriteHex(RecvBuffer);
 
             if (RecvBuffer.Count >= 6)
             {
@@ -101,14 +75,14 @@ namespace wsdcSharp
                         frame[index] = RecvBuffer[index];
                     }
                     frames.Add(frame);
-                    Console.Write("find frame");
+                    Console.WriteLine("find frame");
                     //MessageBox.Show("find frame");
                     RecvBuffer.RemoveRange(0, ret);
                 }
                 else if (RecvBuffer.Count > 50)
                {
                    RecvBuffer.RemoveRange(0, RecvBuffer.Count);
-                   Console.Write("clear RecvBuffer");
+                   Console.WriteLine("clear RecvBuffer");
                 }
             }
         }

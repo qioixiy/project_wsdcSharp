@@ -75,6 +75,7 @@
     <Compile Include="MySerialPort.cs" />
     <Compile Include="Protocal.cs" />
     <Compile Include="Session.cs" />
+    <Compile Include="utils.cs" />
     <EmbeddedResource Include="FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </EmbeddedResource>

@@ -171,6 +171,10 @@ namespace wsdcSharp
         private void timer1_Tick(object sender, EventArgs e)
         {
             //MessageBox.Show("1");
+            if (MySerialPort.Get().frames.Count >0) {
+                MySerialPort.Get().frames.RemoveAt(0);
+                Console.WriteLine("get frames");
+            }
         }
     }
 }
