@@ -28,17 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button_manager = new System.Windows.Forms.Button();
             this.button_setting = new System.Windows.Forms.Button();
             this.button_Exit = new System.Windows.Forms.Button();
             this.listView_orderList = new System.Windows.Forms.ListView();
             this.button_flush = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_handle_order = new System.Windows.Forms.Button();
+            this.serial_connect_status = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // button_manager
             // 
-            this.button_manager.Location = new System.Drawing.Point(808, 66);
+            this.button_manager.Enabled = false;
+            this.button_manager.Location = new System.Drawing.Point(808, 487);
             this.button_manager.Name = "button_manager";
             this.button_manager.Size = new System.Drawing.Size(75, 23);
             this.button_manager.TabIndex = 0;
@@ -48,11 +52,11 @@
             // 
             // button_setting
             // 
-            this.button_setting.Location = new System.Drawing.Point(808, 28);
+            this.button_setting.Location = new System.Drawing.Point(808, 458);
             this.button_setting.Name = "button_setting";
             this.button_setting.Size = new System.Drawing.Size(75, 23);
             this.button_setting.TabIndex = 1;
-            this.button_setting.Text = "設置串口";
+            this.button_setting.Text = "设置串口";
             this.button_setting.UseVisualStyleBackColor = true;
             this.button_setting.Click += new System.EventHandler(this.button_setting_Click);
             // 
@@ -68,6 +72,7 @@
             // 
             // listView_orderList
             // 
+            this.listView_orderList.FullRowSelect = true;
             this.listView_orderList.Location = new System.Drawing.Point(13, 28);
             this.listView_orderList.Name = "listView_orderList";
             this.listView_orderList.Size = new System.Drawing.Size(773, 511);
@@ -76,7 +81,7 @@
             // 
             // button_flush
             // 
-            this.button_flush.Location = new System.Drawing.Point(808, 478);
+            this.button_flush.Location = new System.Drawing.Point(808, 67);
             this.button_flush.Name = "button_flush";
             this.button_flush.Size = new System.Drawing.Size(75, 23);
             this.button_flush.TabIndex = 4;
@@ -84,22 +89,39 @@
             this.button_flush.UseVisualStyleBackColor = true;
             this.button_flush.Click += new System.EventHandler(this.button_flush_Click);
             // 
-            // button1
+            // btn_handle_order
             // 
-            this.button1.Location = new System.Drawing.Point(808, 119);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_handle_order.Enabled = false;
+            this.btn_handle_order.Location = new System.Drawing.Point(808, 28);
+            this.btn_handle_order.Name = "btn_handle_order";
+            this.btn_handle_order.Size = new System.Drawing.Size(75, 23);
+            this.btn_handle_order.TabIndex = 5;
+            this.btn_handle_order.Text = "处理订单";
+            this.btn_handle_order.UseVisualStyleBackColor = true;
+            this.btn_handle_order.Click += new System.EventHandler(this.btn_handle_order_Click);
+            // 
+            // serial_connect_status
+            // 
+            this.serial_connect_status.AutoSize = true;
+            this.serial_connect_status.Location = new System.Drawing.Point(806, 433);
+            this.serial_connect_status.Name = "serial_connect_status";
+            this.serial_connect_status.Size = new System.Drawing.Size(65, 12);
+            this.serial_connect_status.TabIndex = 6;
+            this.serial_connect_status.Text = "设备未连接";
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(895, 551);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.serial_connect_status);
+            this.Controls.Add(this.btn_handle_order);
             this.Controls.Add(this.button_flush);
             this.Controls.Add(this.listView_orderList);
             this.Controls.Add(this.button_Exit);
@@ -111,6 +133,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -121,6 +144,8 @@
         private System.Windows.Forms.Button button_Exit;
         private System.Windows.Forms.ListView listView_orderList;
         private System.Windows.Forms.Button button_flush;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_handle_order;
+        private System.Windows.Forms.Label serial_connect_status;
+        private System.Windows.Forms.Timer timer1;
     }
 }

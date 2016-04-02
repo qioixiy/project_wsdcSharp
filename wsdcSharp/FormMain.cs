@@ -122,6 +122,17 @@ namespace wsdcSharp
         private void button_setting_Click(object sender, EventArgs e)
         {
             new FormSetting().ShowDialog();
+            if (!MySerialPort.Get().serialPortOrig.IsOpen)
+            {
+                serial_connect_status.Text = "设备未连接";
+                btn_handle_order.Enabled = false;
+                button_manager.Enabled = false;
+            }
+            else {
+                serial_connect_status.Text = "设备已连接";
+                btn_handle_order.Enabled = true;
+                button_manager.Enabled = true;
+            }
         }
 
         private void button_Exit_Click(object sender, EventArgs e)
@@ -134,7 +145,7 @@ namespace wsdcSharp
             UpdateOrderList();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btn_handle_order_Click(object sender, EventArgs e)
         {
             byte[] bytes = { 0x01, 0x02 };
             Protocal.Frame frame = Protocal.MakeFrame(
@@ -146,6 +157,20 @@ namespace wsdcSharp
             List<byte> listByte = Protocal.FrameToListByte(frame);
 
             int ret = Protocal.ParserFrame(listByte);
+
+            if (listView_orderList.FocusedItem != null)
+            {
+                string s1 = listView_orderList.FocusedItem.SubItems[0].Text;
+                MessageBox.Show("将要处理订单:" + s1);
+            }
+            else {
+                MessageBox.Show("选择你将要处理的订单");
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            //MessageBox.Show("1");
         }
     }
 }

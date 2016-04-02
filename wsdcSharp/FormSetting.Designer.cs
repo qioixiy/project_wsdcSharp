@@ -142,7 +142,7 @@
             this.Controls.Add(this.textBox_RecvData);
             this.MaximizeBox = false;
             this.Name = "FormSetting";
-            this.Text = "設置";
+            this.Text = "连接设置";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSetting_FormClosing);
             this.Load += new System.EventHandler(this.FormSetting_Load);
             this.ResumeLayout(false);

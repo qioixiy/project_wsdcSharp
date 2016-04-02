@@ -94,6 +94,7 @@ namespace wsdcSharp
                         MySerialPort.Get().serialPortOrig.PortName = comboBox_SerialPort.Text;
                         MySerialPort.Get().serialPortOrig.BaudRate = int.Parse(comboBox_BandRate.Text);
                         MySerialPort.Get().serialPortOrig.Open();
+
                     }
                 }
                 else
