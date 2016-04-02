@@ -50,7 +50,7 @@ namespace wsdcSharp
             }
         };
 
-        public Frame MakeFrame(byte DeviceAddr, byte FuncID, byte DataDestAddr, byte[] Data)
+        public static Frame MakeFrame(byte DeviceAddr, byte FuncID, byte DataDestAddr, byte[] Data)
         {
             Frame frame = new Frame();
 

@@ -136,10 +136,8 @@ namespace wsdcSharp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Protocal p = new Protocal();
-
             byte[] bytes = { 0x01, 0x02 };
-            Protocal.Frame frame = p.MakeFrame(
+            Protocal.Frame frame = Protocal.MakeFrame(
                 Protocal.DeviceAddr_MCU,
                 Protocal.FuncID_ReadData,
                 Protocal.DataDestAddr_CanPan,

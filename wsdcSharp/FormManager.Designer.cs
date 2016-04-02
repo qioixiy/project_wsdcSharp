@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.button_chongzhi = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox_chongzhi = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox_settingID = new System.Windows.Forms.TextBox();
             this.button_setID = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -46,12 +46,12 @@
             this.button_chongzhi.UseVisualStyleBackColor = true;
             this.button_chongzhi.Click += new System.EventHandler(this.button_chongzhi_Click);
             // 
-            // textBox1
+            // textBox_chongzhi
             // 
-            this.textBox1.Location = new System.Drawing.Point(66, 24);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 21);
-            this.textBox1.TabIndex = 1;
+            this.textBox_chongzhi.Location = new System.Drawing.Point(66, 24);
+            this.textBox_chongzhi.Name = "textBox_chongzhi";
+            this.textBox_chongzhi.Size = new System.Drawing.Size(100, 21);
+            this.textBox_chongzhi.TabIndex = 1;
             // 
             // label1
             // 
@@ -71,12 +71,12 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "设置ID";
             // 
-            // textBox2
+            // textBox_settingID
             // 
-            this.textBox2.Location = new System.Drawing.Point(66, 67);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 21);
-            this.textBox2.TabIndex = 4;
+            this.textBox_settingID.Location = new System.Drawing.Point(66, 67);
+            this.textBox_settingID.Name = "textBox_settingID";
+            this.textBox_settingID.Size = new System.Drawing.Size(100, 21);
+            this.textBox_settingID.TabIndex = 4;
             // 
             // button_setID
             // 
@@ -94,10 +94,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(290, 320);
             this.Controls.Add(this.button_setID);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox_settingID);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBox_chongzhi);
             this.Controls.Add(this.button_chongzhi);
             this.MaximizeBox = false;
             this.Name = "FormManager";
@@ -111,10 +111,10 @@
         #endregion
 
         private System.Windows.Forms.Button button_chongzhi;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox_chongzhi;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox_settingID;
         private System.Windows.Forms.Button button_setID;
     }
 }

@@ -29,7 +29,15 @@ namespace wsdcSharp
 
         private void button_chongzhi_Click(object sender, EventArgs e)
         {
+            byte[] bs = System.Text.Encoding.Default.GetBytes(textBox_chongzhi.Text);
+            
+            Protocal.Frame frame = Protocal.MakeFrame(
+                Protocal.DeviceAddr_MCU,
+                Protocal.FuncID_WriteData,
+                Protocal.DataDestAddr_YongHuYuE,
+                bs);
 
+            MySerialPort.Get().SendFrame(frame);
         }
     }
 }
