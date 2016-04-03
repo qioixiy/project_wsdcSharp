@@ -188,6 +188,22 @@ namespace wsdcSharp
             if (f.DeviceAddr == Protocal.DeviceAddr_PC)
             { 
                 // 接收到MCU相应数据帧
+                if (f.FuncID == Protocal.FuncID_WriteData)
+                {
+                    textBox_process.AppendText("MCU响应PC写数据\r\n");
+                    if (f.DataField.DataDestAddr == Protocal.DataDestAddr_YongHuID)
+                    {
+                        textBox_process.AppendText("设置用户ID成功\r\n");
+                    }
+                    else if (f.DataField.DataDestAddr == Protocal.DataDestAddr_CanPan)
+                    {
+                        textBox_process.AppendText("设置餐盘ID成功\r\n");
+                    }
+                    else if (f.DataField.DataDestAddr == Protocal.DataDestAddr_YongHuYuE)
+                    {
+                        textBox_process.AppendText("充值成功\r\n");
+                    }
+                }
             }
             else if (f.DeviceAddr == Protocal.DeviceAddr_MCU)
             {
