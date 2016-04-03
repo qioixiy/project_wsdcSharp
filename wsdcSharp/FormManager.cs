@@ -22,9 +22,29 @@ namespace wsdcSharp
 
         }
 
-        private void button_setID_Click(object sender, EventArgs e)
+        private void button_setcanpanID_Click(object sender, EventArgs e)
         {
+            byte[] bs = System.Text.Encoding.Default.GetBytes(textBox_canpanID.Text);
 
+            Protocal.Frame frame = Protocal.MakeFrame(
+                Protocal.DeviceAddr_MCU,
+                Protocal.FuncID_WriteData,
+                Protocal.DataDestAddr_CanPan,
+                bs);
+
+            MySerialPort.Get().SendFrame(frame);
+        }
+        private void button_setxiaofeikaID_Click(object sender, EventArgs e)
+        {
+            byte[] bs = System.Text.Encoding.Default.GetBytes(textBox_xiaofeikaID.Text);
+
+            Protocal.Frame frame = Protocal.MakeFrame(
+                Protocal.DeviceAddr_MCU,
+                Protocal.FuncID_WriteData,
+                Protocal.DataDestAddr_YongHuID,
+                bs);
+
+            MySerialPort.Get().SendFrame(frame);
         }
 
         private void button_chongzhi_Click(object sender, EventArgs e)

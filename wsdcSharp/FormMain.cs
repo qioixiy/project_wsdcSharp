@@ -132,6 +132,7 @@ namespace wsdcSharp
                 serial_connect_status.Text = "设备已连接";
                 btn_handle_order.Enabled = true;
                 button_manager.Enabled = true;
+                textBox_process.AppendText("连接设备成功" + "\n");
             }
         }
 
@@ -168,12 +169,74 @@ namespace wsdcSharp
             }
         }
 
+        int HandleFrame(byte[] bs)
+        {
+            List<byte> lbs = new List<byte>();
+            string s = "frame:";
+            foreach (byte b in bs) {
+                string ss = string.Format("0x{0:x2} ", b);
+                s += ss;
+                lbs.Add(b);
+            }
+            s += "\n";
+            textBox_process.AppendText(s);
+
+            Protocal.Frame f = Protocal.ListByteToFrame(lbs);
+
+            textBox_process.AppendText(Protocal.FrameToString(f));
+
+            if (f.DeviceAddr == Protocal.DeviceAddr_PC)
+            { 
+                // 接收到MCU相应数据帧
+            }
+            else if (f.DeviceAddr == Protocal.DeviceAddr_MCU)
+            {
+                textBox_process.AppendText("MCU上报写数据\n");
+                // MCU上报写数据
+                if (f.FuncID == Protocal.FuncID_WriteData) {
+                    // 数据值类型为用户
+                    textBox_process.AppendText("数据值类型为用户\n");
+                    if (f.DataField.DataDestAddr == Protocal.DataDestAddr_YongHuID)
+                    {
+                        // 发现空卡
+                        if (f.DataField.Data.Length == 0)
+                        {
+                            textBox_process.AppendText("发现空卡\n");
+                            // 响应 MCU
+                            byte[] bss = { Protocal.Response_OK};
+                            Protocal.Frame frame = Protocal.MakeFrame(
+                                f.DeviceAddr,
+                                f.FuncID,
+                                f.DataField.DataDestAddr,
+                                bss);
+
+                            MySerialPort.Get().SendFrame(frame);
+                        }
+                    }
+                    else if (f.DataField.Data[1] == Protocal.DataDestAddr_CanPan)
+                    {
+                        ;
+                    }
+                }
+                // MCU读数据
+                else if (f.FuncID == Protocal.FuncID_ReadData)
+                {
+                    ;
+                }
+            }
+
+            return 0;
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //MessageBox.Show("1");
-            if (MySerialPort.Get().frames.Count >0) {
+            if (MySerialPort.Get().frames.Count > 0)
+            {
+                Console.WriteLine("get frame");
+                byte[] lb = MySerialPort.Get().frames[0];
+                HandleFrame(lb);
+
                 MySerialPort.Get().frames.RemoveAt(0);
-                Console.WriteLine("get frames");
             }
         }
     }

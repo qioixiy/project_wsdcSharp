@@ -15,12 +15,25 @@ namespace wsdcSharp
         public List<Byte> RecvBuffer;
         public List<Byte[]> frames;
 
+        public enum CardStatus
+        {
+            CARD_NONE,
+            CARD_KONGKA,
+            CARD_CANPAN,
+            CARD_XIAOFEIKA,
+        };
+        public static CardStatus mCardStatus;
+        public static void SetCardStatus(CardStatus cs)
+        {
+            mCardStatus = cs;
+        }
         public MySerialPort()
         {
             serialPortOrig = new System.IO.Ports.SerialPort();
             serialPortOrig.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(DataReceived);
             RecvBuffer = new List<Byte>();
             frames = new List<Byte[]>();
+            mCardStatus = CardStatus.CARD_NONE;
         }
         public static MySerialPort Get()
         {
@@ -62,8 +75,9 @@ namespace wsdcSharp
             //ConsoleWriteHex(buf, size);
             utils.ConsoleWriteHex(RecvBuffer);
 
-            if (RecvBuffer.Count >= 6)
+            if (RecvBuffer.Count >= 5)
             {
+                Console.WriteLine("handleRecvBuffer");
                 int ret = handleRecvBuffer();
                 if (ret > 0)
                 {
@@ -82,7 +96,7 @@ namespace wsdcSharp
                 else if (RecvBuffer.Count > 50)
                {
                    RecvBuffer.RemoveRange(0, RecvBuffer.Count);
-                   Console.WriteLine("clear RecvBuffer");
+                   Console.WriteLine("invalid data, clear RecvBuffer");
                 }
             }
         }

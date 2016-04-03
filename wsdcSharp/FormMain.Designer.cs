@@ -37,6 +37,7 @@
             this.btn_handle_order = new System.Windows.Forms.Button();
             this.serial_connect_status = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.textBox_process = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // button_manager
@@ -46,7 +47,7 @@
             this.button_manager.Name = "button_manager";
             this.button_manager.Size = new System.Drawing.Size(75, 23);
             this.button_manager.TabIndex = 0;
-            this.button_manager.Text = "管理";
+            this.button_manager.Text = "卡片管理";
             this.button_manager.UseVisualStyleBackColor = true;
             this.button_manager.Click += new System.EventHandler(this.button_manager_Click);
             // 
@@ -81,7 +82,7 @@
             // 
             // button_flush
             // 
-            this.button_flush.Location = new System.Drawing.Point(808, 67);
+            this.button_flush.Location = new System.Drawing.Point(902, 28);
             this.button_flush.Name = "button_flush";
             this.button_flush.Size = new System.Drawing.Size(75, 23);
             this.button_flush.TabIndex = 4;
@@ -112,14 +113,26 @@
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
+            this.timer1.Interval = 5000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // textBox_process
+            // 
+            this.textBox_process.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.textBox_process.Location = new System.Drawing.Point(808, 77);
+            this.textBox_process.Multiline = true;
+            this.textBox_process.Name = "textBox_process";
+            this.textBox_process.ReadOnly = true;
+            this.textBox_process.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.textBox_process.Size = new System.Drawing.Size(169, 338);
+            this.textBox_process.TabIndex = 7;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(895, 551);
+            this.ClientSize = new System.Drawing.Size(989, 551);
+            this.Controls.Add(this.textBox_process);
             this.Controls.Add(this.serial_connect_status);
             this.Controls.Add(this.btn_handle_order);
             this.Controls.Add(this.button_flush);
@@ -147,5 +160,6 @@
         private System.Windows.Forms.Button btn_handle_order;
         private System.Windows.Forms.Label serial_connect_status;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.TextBox textBox_process;
     }
 }

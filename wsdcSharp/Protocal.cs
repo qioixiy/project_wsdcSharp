@@ -75,7 +75,7 @@ namespace wsdcSharp
         {
             int ret = 0;
 
-            if (bytes.Count >= 6)
+            if (bytes.Count >= 5)
             {
                 byte size = (byte)(2 + bytes[2]);
                 if (size <= bytes.Count - 1)//check sum
@@ -139,6 +139,25 @@ namespace wsdcSharp
             }
 
             return bytes;
+        }
+
+        public static string FrameToString(Frame frame)
+        {
+            string ret = "", ss = "";
+
+            ss = string.Format("设备地址:0x{0:x2} ", frame.DeviceAddr);
+            ret += ss;
+            ss = string.Format("功能码:0x{0:x2} ", frame.FuncID);
+            ret += ss;
+            ss = string.Format("数据长度:0x{0:x2} ", frame.DataField.Size);
+            ret += ss;
+            ss = string.Format("目的地址:0x{0:x2} ", frame.DataField.DataDestAddr);
+            ret += ss;
+            ss = string.Format("累加和校验:0x{0:x2}", frame.CheckSum);
+            ret += ss;
+            
+
+            return ret;
         }
     }
 }
