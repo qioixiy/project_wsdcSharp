@@ -27,7 +27,7 @@ namespace wsdcSharp
             byte[] bs = System.Text.Encoding.Default.GetBytes(textBox_canpanID.Text);
 
             Protocal.Frame frame = Protocal.MakeFrame(
-                Protocal.DeviceAddr_MCU,
+                Protocal.DeviceAddr_PC,
                 Protocal.FuncID_WriteData,
                 Protocal.DataDestAddr_CanPan,
                 bs);
@@ -39,7 +39,7 @@ namespace wsdcSharp
             byte[] bs = System.Text.Encoding.Default.GetBytes(textBox_xiaofeikaID.Text);
 
             Protocal.Frame frame = Protocal.MakeFrame(
-                Protocal.DeviceAddr_MCU,
+                Protocal.DeviceAddr_PC,
                 Protocal.FuncID_WriteData,
                 Protocal.DataDestAddr_YongHuID,
                 bs);
@@ -49,10 +49,17 @@ namespace wsdcSharp
 
         private void button_chongzhi_Click(object sender, EventArgs e)
         {
-            byte[] bs = System.Text.Encoding.Default.GetBytes(textBox_chongzhi.Text);
-            
+            int totol = int.Parse(textBox_chongzhi.Text);
+            byte[] totol_bs = System.BitConverter.GetBytes(totol);
+            byte[] bs = new byte[4];
+            int index = 0;
+            for (; index < 4; index++)
+            {
+                bs[index] = totol_bs[3 - index];
+            }
+
             Protocal.Frame frame = Protocal.MakeFrame(
-                Protocal.DeviceAddr_MCU,
+                Protocal.DeviceAddr_PC,
                 Protocal.FuncID_WriteData,
                 Protocal.DataDestAddr_YongHuYuE,
                 bs);

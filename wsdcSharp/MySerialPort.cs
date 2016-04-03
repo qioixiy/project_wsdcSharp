@@ -26,6 +26,7 @@ namespace wsdcSharp
         public static void SetCardStatus(CardStatus cs)
         {
             mCardStatus = cs;
+            Console.WriteLine("CardStatus:" + cs.ToString());
         }
         public MySerialPort()
         {

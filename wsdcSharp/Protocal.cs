@@ -143,17 +143,17 @@ namespace wsdcSharp
 
         public static string FrameToString(Frame frame)
         {
-            string ret = "", ss = "";
+            string ret = "\r\n", ss = "";
 
-            ss = string.Format("设备地址:0x{0:x2} ", frame.DeviceAddr);
+            ss = string.Format("设备地址:0x{0:x2}\r\n", frame.DeviceAddr);
             ret += ss;
-            ss = string.Format("功能码:0x{0:x2} ", frame.FuncID);
+            ss = string.Format("功能码:0x{0:x2}\r\n", frame.FuncID);
             ret += ss;
-            ss = string.Format("数据长度:0x{0:x2} ", frame.DataField.Size);
+            ss = string.Format("数据长度:0x{0:x2}\r\n", frame.DataField.Size);
             ret += ss;
-            ss = string.Format("目的地址:0x{0:x2} ", frame.DataField.DataDestAddr);
+            ss = string.Format("目的地址:0x{0:x2}\r\n", frame.DataField.DataDestAddr);
             ret += ss;
-            ss = string.Format("累加和校验:0x{0:x2}", frame.CheckSum);
+            ss = string.Format("累加和校验:0x{0:x2}\r\n", frame.CheckSum);
             ret += ss;
             
 

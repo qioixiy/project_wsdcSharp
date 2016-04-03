@@ -191,19 +191,19 @@ namespace wsdcSharp
             }
             else if (f.DeviceAddr == Protocal.DeviceAddr_MCU)
             {
-                textBox_process.AppendText("MCU上报写数据\n");
                 // MCU上报写数据
+                textBox_process.AppendText("MCU上报写数据\r\n");
                 if (f.FuncID == Protocal.FuncID_WriteData) {
-                    // 数据值类型为用户
-                    textBox_process.AppendText("数据值类型为用户\n");
                     if (f.DataField.DataDestAddr == Protocal.DataDestAddr_YongHuID)
                     {
-                        // 发现空卡
-                        if (f.DataField.Data.Length == 0)
+                        // 数据值类型为用户
+                        textBox_process.AppendText("数据值类型为用户\r\n");
+                        if (f.DataField.Size == 2)
                         {
-                            textBox_process.AppendText("发现空卡\n");
+                            // 发现空卡
+                            textBox_process.AppendText("发现空卡\r\n");
                             // 响应 MCU
-                            byte[] bss = { Protocal.Response_OK};
+                            byte[] bss = { Protocal.Response_OK };
                             Protocal.Frame frame = Protocal.MakeFrame(
                                 f.DeviceAddr,
                                 f.FuncID,
@@ -211,10 +211,43 @@ namespace wsdcSharp
                                 bss);
 
                             MySerialPort.Get().SendFrame(frame);
+                            MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_KONGKA);
+                        }
+                        else if (f.DataField.Size > 2)
+                        {
+                            // 消费卡
+                            textBox_process.AppendText("发现消费卡\r\n");
+                            // 响应 MCU
+                            byte[] bss = { Protocal.Response_OK };
+                            Protocal.Frame frame = Protocal.MakeFrame(
+                                f.DeviceAddr,
+                                f.FuncID,
+                                f.DataField.DataDestAddr,
+                                bss);
+
+                            MySerialPort.Get().SendFrame(frame);
+                            MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_XIAOFEIKA);
                         }
                     }
-                    else if (f.DataField.Data[1] == Protocal.DataDestAddr_CanPan)
+                    else if (f.DataField.DataDestAddr == Protocal.DataDestAddr_CanPan)
                     {
+                        // 数据值类型为餐盘
+                        textBox_process.AppendText("数据值类型为餐盘\r\n");
+                        // 响应 MCU
+                        byte[] bss = { Protocal.Response_OK };
+                        Protocal.Frame frame = Protocal.MakeFrame(
+                            f.DeviceAddr,
+                            f.FuncID,
+                            f.DataField.DataDestAddr,
+                            bss);
+
+                        MySerialPort.Get().SendFrame(frame);
+                        MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_CANPAN);
+                    }
+                    else if (f.DataField.DataDestAddr == Protocal.DataDestAddr_CanPan)
+                    {
+                        // 数据值类型为餐盘
+                        textBox_process.AppendText("数据值类型为餐盘\r\n");
                         ;
                     }
                 }
@@ -238,6 +271,7 @@ namespace wsdcSharp
 
                 MySerialPort.Get().frames.RemoveAt(0);
             }
+            Console.WriteLine("CardStatus:" + MySerialPort.mCardStatus.ToString());
         }
     }
 }
