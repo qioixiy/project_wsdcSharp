@@ -35,5 +35,14 @@ namespace wsdcSharp
                 Console.Write("0x{0:x2} ", b);
             }
         }
+        public static byte[] byteReverse(byte[] bi)
+        {
+            byte[] bo = new byte[bi.Length];
+            for (int i = 0; i < bi.Length; i++)
+            {
+                bo[i] = bi[bi.Length - 1 -i];
+            }
+            return bo;
+        }
     }
 }

@@ -36,7 +36,12 @@ namespace wsdcSharp
         }
         private void button_setxiaofeikaID_Click(object sender, EventArgs e)
         {
-            byte[] bs = System.Text.Encoding.Default.GetBytes(textBox_xiaofeikaID.Text);
+            string ss = textBox_xiaofeikaID.Text;
+            string s = ss.Replace(" ","");
+            byte[] bs1 = utils.byteReverse(System.BitConverter.GetBytes(Int16.Parse(s.Substring(0, 4))));
+            byte[] bs2 = utils.byteReverse(System.BitConverter.GetBytes(Int16.Parse(s.Substring(4, 4))));
+            byte[] bs3 = new byte[1] {Byte.Parse(s.Substring(8, 4))};
+            byte[] bs = bs1.Concat(bs2).Concat(bs3).ToArray();
 
             Protocal.Frame frame = Protocal.MakeFrame(
                 Protocal.DeviceAddr_PC,
@@ -51,12 +56,7 @@ namespace wsdcSharp
         {
             int totol = int.Parse(textBox_chongzhi.Text);
             byte[] totol_bs = System.BitConverter.GetBytes(totol);
-            byte[] bs = new byte[4];
-            int index = 0;
-            for (; index < 4; index++)
-            {
-                bs[index] = totol_bs[3 - index];
-            }
+            byte[] bs = utils.byteReverse(totol_bs);
 
             Protocal.Frame frame = Protocal.MakeFrame(
                 Protocal.DeviceAddr_PC,
