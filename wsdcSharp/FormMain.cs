@@ -168,7 +168,7 @@ namespace wsdcSharp
             if (MySerialPort.mCardStatus != MySerialPort.CardStatus.CARD_CANPAN)
             {
                 MessageBox.Show("需要先放上餐盘");
-                //return;
+                return;
             }
 
             if (listView_orderList.FocusedItem != null)
@@ -277,8 +277,21 @@ namespace wsdcSharp
                                     //刷卡消费
                                     textBox_process.AppendText("刷卡消费模式\r\n");
 
-                                    SendCanPanIDFrame("DF59");
-                                    SendTaoCanPriceFrame("20");
+                                    string canpanID = "DF59";
+                                    string price_total = "20";
+                                    string xuehao = user_id.Replace(" ", "");
+                                    for (int i = mOrderList.orderlist.Count - 1; i >= 0; i--)
+                                    {
+                                        if (xuehao == mOrderList.orderlist[i].xuehao)
+                                        {
+                                            canpanID = mOrderList.orderlist[i].dishid;
+                                            price_total = (Int32.Parse(mOrderList.orderlist[i].menuprice)
+                                                        * Int32.Parse(mOrderList.orderlist[i].repeat)).ToString();
+                                            break;
+                                        }
+                                    }
+                                    SendCanPanIDFrame(canpanID);
+                                    SendTaoCanPriceFrame(price_total);
                                 }
                                 else if (MySerialPort.mUiMode == MySerialPort.UiMode.Setting)
                                 {
