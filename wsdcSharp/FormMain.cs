@@ -19,6 +19,7 @@ namespace wsdcSharp
             public string timestamp { get; set; }
             public string userid { get; set; }
             public string username { get; set; }
+            public string xuehao { get; set; }
             public string menuid { get; set; }
             public string menuname { get; set; }
             public string menuprice { get; set; }
@@ -40,6 +41,17 @@ namespace wsdcSharp
             InitializeComponent();
         }
 
+        int BindCanPan(string orderID, string canpanID)
+        {
+            Session session = Session.GetSessionInstance();
+            string ret = session.HttpPost(session.SetServerUrl(), "id=orderBindCanPan"
+                + "&uuid=" + session.GetUuid()
+                + "&orderID=" + orderID
+                + "&canpanID=" + canpanID);
+            //MessageBox.Show(ret);
+
+            return 0;
+        }
         int UpdateOrderList()
         {
             Session session = Session.GetSessionInstance();
@@ -49,7 +61,6 @@ namespace wsdcSharp
 
             JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
             mOrderList = jsonSerializer.Deserialize<OrderList>(ret);
-            //MessageBox.Show(ret);
             
             listView_orderList.Clear();
 
@@ -64,6 +75,7 @@ namespace wsdcSharp
             listView_orderList.Columns.Add("timestamp", "下单时间");
             listView_orderList.Columns.Add("userid", "用户ID");
             listView_orderList.Columns.Add("username", "用户名");
+            listView_orderList.Columns.Add("xuehao", "学号");
             listView_orderList.Columns.Add("menuid", "菜单ID");
             listView_orderList.Columns.Add("menuname", "菜单名");
             listView_orderList.Columns.Add("menuprice", "价格");
@@ -75,6 +87,7 @@ namespace wsdcSharp
             listView_orderList.Columns["timestamp"].Width = 150;
             listView_orderList.Columns["userid"].Width = -2;
             listView_orderList.Columns["username"].Width = -2;
+            listView_orderList.Columns["xuehao"].Width = 100;
             listView_orderList.Columns["menuid"].Width = -2;
             listView_orderList.Columns["menuname"].Width = 100;
             listView_orderList.Columns["menuprice"].Width = 80;
@@ -92,6 +105,7 @@ namespace wsdcSharp
                 item.SubItems.Add(mOrderList.orderlist[i].timestamp);
                 item.SubItems.Add(mOrderList.orderlist[i].userid);
                 item.SubItems.Add(mOrderList.orderlist[i].username);
+                item.SubItems.Add(mOrderList.orderlist[i].xuehao);
                 item.SubItems.Add(mOrderList.orderlist[i].menuid);
                 item.SubItems.Add(mOrderList.orderlist[i].menuname);
                 item.SubItems.Add(mOrderList.orderlist[i].menuprice);
@@ -116,7 +130,9 @@ namespace wsdcSharp
 
         private void button_manager_Click(object sender, EventArgs e)
         {
+            MySerialPort.SetUiMode(MySerialPort.UiMode.Setting);
             new FormManager().ShowDialog();
+            MySerialPort.SetUiMode(MySerialPort.UiMode.Normal);
         }
 
         private void button_setting_Click(object sender, EventArgs e)
@@ -148,21 +164,20 @@ namespace wsdcSharp
 
         private void btn_handle_order_Click(object sender, EventArgs e)
         {
-            byte[] bytes = { 0x01, 0x02 };
-            Protocal.Frame frame = Protocal.MakeFrame(
-                Protocal.DeviceAddr_MCU,
-                Protocal.FuncID_ReadData,
-                Protocal.DataDestAddr_CanPan,
-                bytes);
-
-            List<byte> listByte = Protocal.FrameToListByte(frame);
-
-            int ret = Protocal.ParserFrame(listByte);
+            // 需要先放上餐盘
+            if (MySerialPort.mCardStatus != MySerialPort.CardStatus.CARD_CANPAN)
+            {
+                MessageBox.Show("需要先放上餐盘");
+                //return;
+            }
 
             if (listView_orderList.FocusedItem != null)
             {
-                string s1 = listView_orderList.FocusedItem.SubItems[0].Text;
-                MessageBox.Show("将要处理订单:" + s1);
+                string id = listView_orderList.FocusedItem.SubItems[0].Text;
+                //MessageBox.Show("将要处理订单id:" + id);
+                BindCanPan(id, MySerialPort.CardId);
+
+                UpdateOrderList();
             }
             else {
                 MessageBox.Show("选择你将要处理的订单");
@@ -243,6 +258,20 @@ namespace wsdcSharp
 
                             MySerialPort.Get().SendFrame(frame);
                             MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_XIAOFEIKA);
+
+                            if (MySerialPort.mUiMode == MySerialPort.UiMode.Normal)
+                            {
+                                // 普通模式， 向MCU发送餐盘ID和套餐价格
+                                //刷卡消费
+                                textBox_process.AppendText("刷卡消费\r\n");
+
+                                SendCanPanIDFrame("DF59");
+                                SendTaoCanPriceFrame("20");
+                            }
+                            else if (MySerialPort.mUiMode == MySerialPort.UiMode.Setting)
+                            {
+                                Console.WriteLine("配置模式");
+                            }
                         }
                     }
                     else if (f.DataField.DataDestAddr == Protocal.DataDestAddr_CanPan)
@@ -277,6 +306,35 @@ namespace wsdcSharp
             return 0;
         }
 
+        // 消费刷卡，餐盘卡号下发报文
+        void SendCanPanIDFrame(string canpan_id)
+        {
+            byte[] bs = System.Text.Encoding.Default.GetBytes(canpan_id);
+
+            Protocal.Frame frame = Protocal.MakeFrame(
+                Protocal.DeviceAddr_PC,
+                Protocal.FuncID_WriteData,
+                Protocal.DataDestAddr_CanPan,
+                bs);
+
+            MySerialPort.Get().SendFrame(frame);
+        }
+        // 消费刷卡，餐盘价格下发报文
+        void SendTaoCanPriceFrame(string price)
+        {
+            int totol = int.Parse(price);
+            byte[] totol_bs = System.BitConverter.GetBytes(totol);
+            byte[] bs = utils.byteReverse(totol_bs);
+
+            Protocal.Frame frame = Protocal.MakeFrame(
+                Protocal.DeviceAddr_PC,
+                Protocal.FuncID_WriteData,
+                Protocal.DataDestAddr_TaoCanJinE,
+                bs);
+
+            MySerialPort.Get().SendFrame(frame);
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (MySerialPort.Get().frames.Count > 0)
@@ -288,6 +346,15 @@ namespace wsdcSharp
                 MySerialPort.Get().frames.RemoveAt(0);
             }
             Console.WriteLine("CardStatus:" + MySerialPort.mCardStatus.ToString());
+        }
+
+        private void textBox_process_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox_process_MouseDown(object sender, MouseEventArgs e)
+        {
+            textBox_process.Text = "";
         }
     }
 }

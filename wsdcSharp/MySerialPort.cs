@@ -15,6 +15,11 @@ namespace wsdcSharp
         public List<Byte> RecvBuffer;
         public List<Byte[]> frames;
 
+        public enum UiMode
+        { 
+            Normal,
+            Setting,
+        };
         public enum CardStatus
         {
             CARD_NONE,
@@ -22,7 +27,15 @@ namespace wsdcSharp
             CARD_CANPAN,
             CARD_XIAOFEIKA,
         };
+        public static UiMode mUiMode;
         public static CardStatus mCardStatus;
+        public static string CardId = "0000";
+
+        public static void SetUiMode(UiMode mode)
+        {
+            mUiMode = mode;
+            Console.WriteLine("UiMode:" + mode.ToString());
+        }
         public static void SetCardStatus(CardStatus cs)
         {
             mCardStatus = cs;
@@ -34,7 +47,8 @@ namespace wsdcSharp
             serialPortOrig.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(DataReceived);
             RecvBuffer = new List<Byte>();
             frames = new List<Byte[]>();
-            mCardStatus = CardStatus.CARD_NONE;
+            SetCardStatus(CardStatus.CARD_NONE);
+            SetUiMode(UiMode.Normal);
         }
         public static MySerialPort Get()
         {

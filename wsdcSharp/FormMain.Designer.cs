@@ -43,7 +43,7 @@
             // button_manager
             // 
             this.button_manager.Enabled = false;
-            this.button_manager.Location = new System.Drawing.Point(808, 487);
+            this.button_manager.Location = new System.Drawing.Point(877, 487);
             this.button_manager.Name = "button_manager";
             this.button_manager.Size = new System.Drawing.Size(75, 23);
             this.button_manager.TabIndex = 0;
@@ -53,7 +53,7 @@
             // 
             // button_setting
             // 
-            this.button_setting.Location = new System.Drawing.Point(808, 458);
+            this.button_setting.Location = new System.Drawing.Point(877, 458);
             this.button_setting.Name = "button_setting";
             this.button_setting.Size = new System.Drawing.Size(75, 23);
             this.button_setting.TabIndex = 1;
@@ -63,7 +63,7 @@
             // 
             // button_Exit
             // 
-            this.button_Exit.Location = new System.Drawing.Point(808, 516);
+            this.button_Exit.Location = new System.Drawing.Point(877, 516);
             this.button_Exit.Name = "button_Exit";
             this.button_Exit.Size = new System.Drawing.Size(75, 23);
             this.button_Exit.TabIndex = 2;
@@ -76,13 +76,13 @@
             this.listView_orderList.FullRowSelect = true;
             this.listView_orderList.Location = new System.Drawing.Point(13, 28);
             this.listView_orderList.Name = "listView_orderList";
-            this.listView_orderList.Size = new System.Drawing.Size(773, 511);
+            this.listView_orderList.Size = new System.Drawing.Size(844, 511);
             this.listView_orderList.TabIndex = 3;
             this.listView_orderList.UseCompatibleStateImageBehavior = false;
             // 
             // button_flush
             // 
-            this.button_flush.Location = new System.Drawing.Point(902, 28);
+            this.button_flush.Location = new System.Drawing.Point(971, 28);
             this.button_flush.Name = "button_flush";
             this.button_flush.Size = new System.Drawing.Size(75, 23);
             this.button_flush.TabIndex = 4;
@@ -93,7 +93,7 @@
             // btn_handle_order
             // 
             this.btn_handle_order.Enabled = false;
-            this.btn_handle_order.Location = new System.Drawing.Point(808, 28);
+            this.btn_handle_order.Location = new System.Drawing.Point(877, 28);
             this.btn_handle_order.Name = "btn_handle_order";
             this.btn_handle_order.Size = new System.Drawing.Size(75, 23);
             this.btn_handle_order.TabIndex = 5;
@@ -104,7 +104,7 @@
             // serial_connect_status
             // 
             this.serial_connect_status.AutoSize = true;
-            this.serial_connect_status.Location = new System.Drawing.Point(806, 433);
+            this.serial_connect_status.Location = new System.Drawing.Point(875, 433);
             this.serial_connect_status.Name = "serial_connect_status";
             this.serial_connect_status.Size = new System.Drawing.Size(65, 12);
             this.serial_connect_status.TabIndex = 6;
@@ -119,19 +119,21 @@
             // textBox_process
             // 
             this.textBox_process.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.textBox_process.Location = new System.Drawing.Point(808, 77);
+            this.textBox_process.Location = new System.Drawing.Point(877, 77);
             this.textBox_process.Multiline = true;
             this.textBox_process.Name = "textBox_process";
             this.textBox_process.ReadOnly = true;
             this.textBox_process.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.textBox_process.Size = new System.Drawing.Size(169, 338);
             this.textBox_process.TabIndex = 7;
+            this.textBox_process.TextChanged += new System.EventHandler(this.textBox_process_TextChanged);
+            this.textBox_process.MouseDown += new System.Windows.Forms.MouseEventHandler(this.textBox_process_MouseDown);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(989, 551);
+            this.ClientSize = new System.Drawing.Size(1057, 551);
             this.Controls.Add(this.textBox_process);
             this.Controls.Add(this.serial_connect_status);
             this.Controls.Add(this.btn_handle_order);
