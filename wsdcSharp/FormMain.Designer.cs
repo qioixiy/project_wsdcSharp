@@ -113,7 +113,7 @@
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 5000;
+            this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // textBox_process
@@ -127,6 +127,7 @@
             this.textBox_process.Size = new System.Drawing.Size(169, 338);
             this.textBox_process.TabIndex = 7;
             this.textBox_process.TextChanged += new System.EventHandler(this.textBox_process_TextChanged);
+            this.textBox_process.DoubleClick += new System.EventHandler(this.textBox_process_DoubleClick);
             this.textBox_process.MouseDown += new System.Windows.Forms.MouseEventHandler(this.textBox_process_MouseDown);
             // 
             // FormMain

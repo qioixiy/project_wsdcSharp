@@ -242,12 +242,13 @@ namespace wsdcSharp
                                 bss);
                             MySerialPort.Get().SendFrame(frame);
                             MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_KONGKA);
+                            MySerialPort.CardId = "";
                         }
                         else if (f.DataField.Size > 2)
                         {
                             // 发现消费卡
                             if (f.DataField.DataDestAddr == Protocal.DataDestAddr_YongHuID)
-                            { 
+                            {
                                 textBox_process.AppendText("发现消费卡\r\n");
                                 // 响应 MCU
                                 byte[] bss = { Protocal.Response_OK };
@@ -258,12 +259,23 @@ namespace wsdcSharp
                                     bss);
                                 MySerialPort.Get().SendFrame(frame);
                                 MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_XIAOFEIKA);
+                                byte[] Bs = f.DataField.Data;
+                                byte[] b1 = new byte[2]; b1[1] = Bs[0]; b1[0] = Bs[1];
+                                byte[] b2 = new byte[2]; b2[1] = Bs[2]; b2[0] = Bs[3];
+                                byte[] b3 = new byte[2]; b3[0] = Bs[4]; b3[1] = 0;
+                                UInt16 i1 = System.BitConverter.ToUInt16(b1, 0);
+                                UInt16 i2 = System.BitConverter.ToUInt16(b2, 0);
+                                UInt16 i3 = System.BitConverter.ToUInt16(b3, 0);
+
+                                string user_id = string.Format("{0:D4} {1:D4} {2:D4}", i1, i2, i3);
+                                MySerialPort.CardId = user_id;
+                                textBox_process.AppendText("消费卡ID:" + user_id + "\r\n");
 
                                 if (MySerialPort.mUiMode == MySerialPort.UiMode.Normal)
                                 {
                                     // 普通模式， 向MCU发送餐盘ID和套餐价格
                                     //刷卡消费
-                                    textBox_process.AppendText("刷卡消费\r\n");
+                                    textBox_process.AppendText("刷卡消费模式\r\n");
 
                                     SendCanPanIDFrame("DF59");
                                     SendTaoCanPriceFrame("20");
@@ -291,6 +303,8 @@ namespace wsdcSharp
                         MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_CANPAN);
                         string canpan_id = Encoding.UTF8.GetString(f.DataField.Data);
                         MySerialPort.CardId = canpan_id;
+
+                        textBox_process.AppendText("餐盘ID:" + canpan_id + "\r\n");
                     }
                 }
                 // MCU读数据
@@ -350,6 +364,10 @@ namespace wsdcSharp
         }
 
         private void textBox_process_MouseDown(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void textBox_process_DoubleClick(object sender, EventArgs e)
         {
             textBox_process.Text = "";
         }
