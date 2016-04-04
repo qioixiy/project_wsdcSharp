@@ -187,13 +187,13 @@ namespace wsdcSharp
         int HandleFrame(byte[] bs)
         {
             List<byte> lbs = new List<byte>();
-            string s = "frame:";
+            string s = "\r\nframe:";
             foreach (byte b in bs) {
                 string ss = string.Format("0x{0:x2} ", b);
                 s += ss;
                 lbs.Add(b);
             }
-            s += "\n";
+            s += "\r\n";
             textBox_process.AppendText(s);
 
             Protocal.Frame f = Protocal.ListByteToFrame(lbs);
@@ -240,37 +240,38 @@ namespace wsdcSharp
                                 f.FuncID,
                                 f.DataField.DataDestAddr,
                                 bss);
-
                             MySerialPort.Get().SendFrame(frame);
                             MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_KONGKA);
                         }
                         else if (f.DataField.Size > 2)
                         {
-                            // 消费卡
-                            textBox_process.AppendText("发现消费卡\r\n");
-                            // 响应 MCU
-                            byte[] bss = { Protocal.Response_OK };
-                            Protocal.Frame frame = Protocal.MakeFrame(
-                                f.DeviceAddr,
-                                f.FuncID,
-                                f.DataField.DataDestAddr,
-                                bss);
+                            // 发现消费卡
+                            if (f.DataField.DataDestAddr == Protocal.DataDestAddr_YongHuID)
+                            { 
+                                textBox_process.AppendText("发现消费卡\r\n");
+                                // 响应 MCU
+                                byte[] bss = { Protocal.Response_OK };
+                                Protocal.Frame frame = Protocal.MakeFrame(
+                                    f.DeviceAddr,
+                                    f.FuncID,
+                                    f.DataField.DataDestAddr,
+                                    bss);
+                                MySerialPort.Get().SendFrame(frame);
+                                MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_XIAOFEIKA);
 
-                            MySerialPort.Get().SendFrame(frame);
-                            MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_XIAOFEIKA);
+                                if (MySerialPort.mUiMode == MySerialPort.UiMode.Normal)
+                                {
+                                    // 普通模式， 向MCU发送餐盘ID和套餐价格
+                                    //刷卡消费
+                                    textBox_process.AppendText("刷卡消费\r\n");
 
-                            if (MySerialPort.mUiMode == MySerialPort.UiMode.Normal)
-                            {
-                                // 普通模式， 向MCU发送餐盘ID和套餐价格
-                                //刷卡消费
-                                textBox_process.AppendText("刷卡消费\r\n");
-
-                                SendCanPanIDFrame("DF59");
-                                SendTaoCanPriceFrame("20");
-                            }
-                            else if (MySerialPort.mUiMode == MySerialPort.UiMode.Setting)
-                            {
-                                Console.WriteLine("配置模式");
+                                    SendCanPanIDFrame("DF59");
+                                    SendTaoCanPriceFrame("20");
+                                }
+                                else if (MySerialPort.mUiMode == MySerialPort.UiMode.Setting)
+                                {
+                                    Console.WriteLine("配置模式");
+                                }
                             }
                         }
                     }
@@ -285,15 +286,11 @@ namespace wsdcSharp
                             f.FuncID,
                             f.DataField.DataDestAddr,
                             bss);
-
                         MySerialPort.Get().SendFrame(frame);
+
                         MySerialPort.SetCardStatus(MySerialPort.CardStatus.CARD_CANPAN);
-                    }
-                    else if (f.DataField.DataDestAddr == Protocal.DataDestAddr_CanPan)
-                    {
-                        // 数据值类型为餐盘
-                        textBox_process.AppendText("数据值类型为餐盘\r\n");
-                        ;
+                        string canpan_id = Encoding.UTF8.GetString(f.DataField.Data);
+                        MySerialPort.CardId = canpan_id;
                     }
                 }
                 // MCU读数据
