@@ -13,6 +13,17 @@ namespace wsdcSharp
 {
     public partial class FormMain : Form
     {
+        class CanPanIDAndPrice
+        {
+            public string uuid { get; set; }
+            public string ret { get; set; }
+            public string id { get; set; }
+            public string xuehao { get; set; }
+            public string repeat { get; set; }
+            public string price { get; set; }
+            public string dish_id { get; set; }
+        }
+        CanPanIDAndPrice mCanPanIDAndPrice;
         class Order
         {
             public string id { get; set; }
@@ -183,7 +194,16 @@ namespace wsdcSharp
                 MessageBox.Show("选择你将要处理的订单");
             }
         }
+        string GetCanPanIdAndTotalPriceWithXuehao(string xuehao)
+        {
+            Session session = Session.GetSessionInstance();
+            string ret = session.HttpPost(session.SetServerUrl(), "id=GetCanPanIdAndTotalPrice"
+                + "&uuid=" + session.GetUuid()
+                + "&userID=" + xuehao);
+            //MessageBox.Show(ret);
 
+            return ret;
+        }
         int HandleFrame(byte[] bs)
         {
             List<byte> lbs = new List<byte>();
@@ -280,14 +300,28 @@ namespace wsdcSharp
                                     string canpanID = "DF59";
                                     string price_total = "20";
                                     string xuehao = user_id.Replace(" ", "");
-                                    for (int i = mOrderList.orderlist.Count - 1; i >= 0; i--)
+                                    if (true)
                                     {
-                                        if (xuehao == mOrderList.orderlist[i].xuehao)
+                                        string ret = GetCanPanIdAndTotalPriceWithXuehao(xuehao);
+                                        JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+                                        mCanPanIDAndPrice = jsonSerializer.Deserialize<CanPanIDAndPrice>(ret);
+
+                                        canpanID = mCanPanIDAndPrice.dish_id;
+                                        price_total = (Int32.Parse(mCanPanIDAndPrice.repeat)
+                                                    * Int32.Parse(mCanPanIDAndPrice.price)).ToString();
+
+                                        textBox_process.AppendText("餐盘ID:" + canpanID + "\r\n");
+                                        textBox_process.AppendText("价格:" + price_total + "\r\n");
+                                    } else {
+                                        for (int i = mOrderList.orderlist.Count - 1; i >= 0; i--)
                                         {
-                                            canpanID = mOrderList.orderlist[i].dishid;
-                                            price_total = (Int32.Parse(mOrderList.orderlist[i].menuprice)
-                                                        * Int32.Parse(mOrderList.orderlist[i].repeat)).ToString();
-                                            break;
+                                            if (xuehao == mOrderList.orderlist[i].xuehao)
+                                            {
+                                                canpanID = mOrderList.orderlist[i].dishid;
+                                                price_total = (Int32.Parse(mOrderList.orderlist[i].menuprice)
+                                                            * Int32.Parse(mOrderList.orderlist[i].repeat)).ToString();
+                                                break;
+                                            }
                                         }
                                     }
                                     SendCanPanIDFrame(canpanID);
@@ -361,13 +395,13 @@ namespace wsdcSharp
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            Console.WriteLine(MySerialPort.Get().frames.Count);
             if (MySerialPort.Get().frames.Count > 0)
             {
                 Console.WriteLine("get frame");
                 byte[] lb = MySerialPort.Get().frames[0];
-                HandleFrame(lb);
-
                 MySerialPort.Get().frames.RemoveAt(0);
+                HandleFrame(lb);
             }
             Console.WriteLine("CardStatus:" + MySerialPort.mCardStatus.ToString());
         }
