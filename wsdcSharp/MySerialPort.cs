@@ -87,8 +87,9 @@ namespace wsdcSharp
             }
 
             RecvBuffer.AddRange(buf1);
-            //ConsoleWriteHex(buf, size);
-            utils.ConsoleWriteHex(RecvBuffer);
+            Console.Write("DataReceived:size[" + size + "]");
+            utils.ConsoleWriteHex(buf1, size);
+            //utils.ConsoleWriteHex(RecvBuffer);
 
             if (RecvBuffer.Count >= 5)
             {

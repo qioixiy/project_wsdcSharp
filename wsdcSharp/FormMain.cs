@@ -307,6 +307,9 @@ namespace wsdcSharp
                                         mCanPanIDAndPrice = jsonSerializer.Deserialize<CanPanIDAndPrice>(ret);
 
                                         canpanID = mCanPanIDAndPrice.dish_id;
+                                        Console.WriteLine("餐盘ID：" + canpanID);
+                                        Console.WriteLine("repeat:" + mCanPanIDAndPrice.repeat);
+                                        Console.WriteLine("price：" + mCanPanIDAndPrice.price);
                                         price_total = (Int32.Parse(mCanPanIDAndPrice.repeat)
                                                     * Int32.Parse(mCanPanIDAndPrice.price)).ToString();
 
@@ -395,7 +398,7 @@ namespace wsdcSharp
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine(MySerialPort.Get().frames.Count);
+            //Console.WriteLine(MySerialPort.Get().frames.Count);
             if (MySerialPort.Get().frames.Count > 0)
             {
                 Console.WriteLine("get frame");

@@ -21,7 +21,17 @@ namespace wsdcSharp
         private void FormSetting_Load(object sender, EventArgs e)
         {
             comboBox_SerialPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
-            comboBox_SerialPort.Text = System.IO.Ports.SerialPort.GetPortNames()[0];
+            string default_sericalPort = "没有发现串口";
+            string[] serialPortList = System.IO.Ports.SerialPort.GetPortNames();
+            if (0 != serialPortList.Count())
+            {
+                default_sericalPort = System.IO.Ports.SerialPort.GetPortNames()[0];
+            }
+            else
+            {
+                MessageBox.Show("没有发现串口");
+            }
+            comboBox_SerialPort.Text = default_sericalPort;
             string[] sBandRate = { "115200", "9600" };
             comboBox_BandRate.Items.AddRange(sBandRate);
             comboBox_BandRate.Text = sBandRate[0];
