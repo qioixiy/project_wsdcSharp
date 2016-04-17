@@ -45,11 +45,13 @@ namespace wsdcSharp
         }
         Form retForm;
         OrderList mOrderList;
+        string mCurCardStatusStr;
 
         public FormMain(Form _retForm)
         {
             retForm = _retForm;
             InitializeComponent();
+            mCurCardStatusStr = "CARD_NONE";
         }
 
         int BindCanPan(string orderID, string canpanID)
@@ -406,7 +408,11 @@ namespace wsdcSharp
                 MySerialPort.Get().frames.RemoveAt(0);
                 HandleFrame(lb);
             }
-            Console.WriteLine("CardStatus:" + MySerialPort.mCardStatus.ToString());
+            string mCardStatusStr = MySerialPort.mCardStatus.ToString();
+            if (!mCurCardStatusStr.Equals(mCardStatusStr)) {
+                Console.WriteLine("mCurCardStatusStr:" + mCurCardStatusStr + ",mCardStatusStr:" + mCardStatusStr);
+                mCurCardStatusStr = mCardStatusStr;
+            }
         }
 
         private void textBox_process_TextChanged(object sender, EventArgs e)
