@@ -284,7 +284,7 @@ namespace wsdcSharp
                                 byte[] Bs = f.DataField.Data;
                                 byte[] b1 = new byte[2]; b1[1] = Bs[0]; b1[0] = Bs[1];
                                 byte[] b2 = new byte[2]; b2[1] = Bs[2]; b2[0] = Bs[3];
-                                byte[] b3 = new byte[2]; b3[0] = Bs[4]; b3[1] = 0;
+                                byte[] b3 = new byte[2]; b3[1] = Bs[4]; b3[0] = Bs[5];
                                 UInt16 i1 = System.BitConverter.ToUInt16(b1, 0);
                                 UInt16 i2 = System.BitConverter.ToUInt16(b2, 0);
                                 UInt16 i3 = System.BitConverter.ToUInt16(b3, 0);
@@ -331,6 +331,8 @@ namespace wsdcSharp
                                     }
                                     SendCanPanIDFrame(canpanID);
                                     SendTaoCanPriceFrame(price_total);
+                                    
+                                    UpdateOrderList();
                                 }
                                 else if (MySerialPort.mUiMode == MySerialPort.UiMode.Setting)
                                 {
