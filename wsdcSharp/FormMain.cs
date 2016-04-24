@@ -312,6 +312,11 @@ namespace wsdcSharp
                                         Console.WriteLine("餐盘ID：" + canpanID);
                                         Console.WriteLine("repeat:" + mCanPanIDAndPrice.repeat);
                                         Console.WriteLine("price：" + mCanPanIDAndPrice.price);
+                                        if ((mCanPanIDAndPrice.repeat == null)
+                                            || (mCanPanIDAndPrice.price == null))
+                                        {
+                                            return -1;
+                                        }
                                         price_total = (Int32.Parse(mCanPanIDAndPrice.repeat)
                                                     * Int32.Parse(mCanPanIDAndPrice.price)).ToString();
 
@@ -329,7 +334,9 @@ namespace wsdcSharp
                                             }
                                         }
                                     }
+                                    Delay(1);
                                     SendCanPanIDFrame(canpanID);
+                                    Delay(1);
                                     SendTaoCanPriceFrame(price_total);
                                     
                                     UpdateOrderList();
@@ -428,6 +435,19 @@ namespace wsdcSharp
         private void textBox_process_DoubleClick(object sender, EventArgs e)
         {
             textBox_process.Text = "";
+        }
+        public static bool Delay(int delayTime)
+        {
+            DateTime now = DateTime.Now;
+            int s;
+            do
+            {
+                TimeSpan spand = DateTime.Now - now;
+                s = spand.Seconds;
+                Application.DoEvents();
+            }
+            while (s < delayTime);
+            return true;
         }
     }
 }
