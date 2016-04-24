@@ -40,7 +40,8 @@ namespace wsdcSharp
             string s = ss.Replace(" ","");
             byte[] bs1 = utils.byteReverse(System.BitConverter.GetBytes(Int16.Parse(s.Substring(0, 4))));
             byte[] bs2 = utils.byteReverse(System.BitConverter.GetBytes(Int16.Parse(s.Substring(4, 4))));
-            byte[] bs3 = new byte[1] {Byte.Parse(s.Substring(8, 4))};
+            //byte[] bs3 = new byte[1] {Byte.Parse(s.Substring(8, 4))};
+            byte[] bs3 = utils.byteReverse(System.BitConverter.GetBytes(Int16.Parse(s.Substring(8, 4))));
             byte[] bs = bs1.Concat(bs2).Concat(bs3).ToArray();
 
             Protocal.Frame frame = Protocal.MakeFrame(
