@@ -315,6 +315,7 @@ namespace wsdcSharp
                                         if ((mCanPanIDAndPrice.repeat == null)
                                             || (mCanPanIDAndPrice.price == null))
                                         {
+                                            textBox_process.AppendText("没有发现你的订单\r\n");
                                             return -1;
                                         }
                                         price_total = (Int32.Parse(mCanPanIDAndPrice.repeat)
