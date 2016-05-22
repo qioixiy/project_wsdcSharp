@@ -108,13 +108,14 @@ namespace wsdcSharp
             listView_orderList.Columns["dishid"].Width = 80;
             listView_orderList.Columns["spec"].Width = -2;//-1:根据内容设置宽度, -2:根据标题设置宽度
 
+            int index_id = 0;
             //添加表格内容
             for (int i = mOrderList.orderlist.Count - 1; i >= 0; i--)
             {
                 ListViewItem item = new ListViewItem();
                 item.SubItems.Clear();
-
-                item.SubItems[0].Text = mOrderList.orderlist[i].id;
+                index_id++;
+                item.SubItems[0].Text = index_id.ToString();//mOrderList.orderlist[i].id;
                 item.SubItems.Add(mOrderList.orderlist[i].timestamp);
                 item.SubItems.Add(mOrderList.orderlist[i].userid);
                 item.SubItems.Add(mOrderList.orderlist[i].username);
